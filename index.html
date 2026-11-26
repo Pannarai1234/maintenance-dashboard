@@ -2,14 +2,291 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maintenance Monitoring Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Maintenance Monitoring Center · Tenneco</title>
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%231f3fa0'/><text x='16' y='22' font-family='Arial' font-weight='700' font-size='16' text-anchor='middle' fill='white'>T</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #eef5fc; --surface: #ffffff; --surface-2: #f2f8fd; --surface-3: #e2f0fb;
+      --text: #11324b; --muted: #50708a; --border: #d6e7f4; --border-2: #b7d3e8;
+      --primary: #0b74ba; --primary-2: #085e98; --primary-soft: #dbeefc; --sky: #7fc4ef;
+      --brand: #1f3fa0;
+      --side: 272px; --top: 68px;
+      --font: "IBM Plex Sans Thai", "Leelawadee UI", Tahoma, system-ui, sans-serif;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
     html, body { margin: 0; height: 100%; }
-    iframe { border: 0; width: 100%; height: 100%; display: block; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+    button, a { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+    .ico { width: 21px; height: 21px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+    .app { display: grid; grid-template-columns: var(--side) minmax(0, 1fr); grid-template-rows: var(--top) minmax(0, 1fr); height: 100vh; height: 100dvh; }
+    .app.collapsed { --side: 86px; }
+
+    /* แถบบน */
+    .topbar {
+      grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; padding: 0 16px 0 22px;
+      background: var(--surface); border-bottom: 1px solid var(--border); z-index: 20;
+    }
+    .brand { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .logo {
+      display: block; flex: none; width: 138px; aspect-ratio: 427 / 71;
+      background: url("data:image/webp;base64,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") no-repeat 48.9% 49.6% / 111% auto;
+    }
+    .sep { width: 1px; height: 34px; background: var(--border-2); flex: none; }
+    .brand-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+    .brand-text b { font-size: 1.05rem; font-weight: 600; letter-spacing: .04em; color: var(--brand); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brand-text small { font-size: .82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .top-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .clock { font-size: .88rem; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; margin-right: 6px; }
+    .icon-btn {
+      display: inline-grid; place-items: center; width: 44px; height: 44px; flex: none; text-decoration: none;
+      border: 1px solid var(--border); border-radius: 13px; background: var(--surface); color: var(--muted); cursor: pointer;
+    }
+    .icon-btn:hover { background: var(--primary-soft); color: var(--primary-2); }
+    .menu-btn { display: none; border: 0; background: none; color: var(--text); }
+
+    /* เมนูด้านข้าง */
+    .sidebar { display: flex; flex-direction: column; background: var(--surface); border-right: 1px solid var(--border); overflow: hidden auto; z-index: 15; }
+    nav { flex: 1; padding: 16px 14px 8px 0; }
+    .nav-btn {
+      display: flex; align-items: center; gap: 16px; width: 100%; min-height: 60px; margin: 3px 0;
+      padding: 6px 14px 6px 26px; border: 0; border-radius: 0 999px 999px 0; background: none;
+      text-align: left; cursor: pointer; white-space: nowrap;
+    }
+    .nav-btn .ico { width: 24px; height: 24px; color: var(--muted); }
+    .nav-btn:hover { background: var(--surface-2); }
+    .nav-btn.active { background: var(--primary-soft); }
+    .nav-btn.active .ico, .nav-btn.active .nav-title { color: var(--primary-2); }
+    .nav-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+    .nav-title { font-size: .95rem; font-weight: 600; letter-spacing: .03em; overflow: hidden; text-overflow: ellipsis; }
+    .nav-sub { font-size: .8rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
+    .divider { height: 1px; margin: 12px 0 12px 22px; background: var(--border); }
+    .collapse-btn {
+      display: grid; place-items: center; width: 42px; height: 42px; margin: 6px 14px 14px auto;
+      border: 1px solid var(--border); border-radius: 13px; background: var(--surface); color: var(--muted); cursor: pointer;
+    }
+    .collapse-btn:hover { background: var(--primary-soft); color: var(--primary-2); }
+    .collapse-btn .ico { transform: rotate(180deg); }
+    .collapsed nav { padding: 16px 0 8px; }
+    .collapsed .nav-btn { justify-content: center; width: 58px; padding: 0; margin: 6px auto; border-radius: 16px; }
+    .collapsed .nav-text { display: none; }
+    .collapsed .divider { margin: 12px 16px; }
+    .collapsed .collapse-btn { margin: 6px auto 14px; }
+    .collapsed .collapse-btn .ico { transform: none; }
+
+    /* พื้นที่แสดงผล */
+    .stage { position: relative; min-width: 0; min-height: 0; background: var(--bg); }
+    .stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--surface); }
+    .loading {
+      position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 14px;
+      background: var(--bg); color: var(--muted); z-index: 2;
+    }
+    .spinner { width: 38px; height: 38px; border-radius: 50%; border: 4px solid var(--primary-soft); border-top-color: var(--primary); animation: spin .9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .scrim { display: none; }
+
+    /* แท็บเล็ต: ย่อชื่อในแถบบน */
+    @media (max-width: 1000px) {
+      .clock { display: none; }
+      .brand-text small { display: none; }
+    }
+    /* มือถือ: เมนูเลื่อนออกจากซ้าย */
+    @media (max-width: 640px) {
+      .app, .app.collapsed { grid-template-columns: minmax(0, 1fr); --top: 60px; }
+      .topbar { padding: 0 8px 0 4px; gap: 6px; }
+      .menu-btn { display: inline-grid; }
+      .brand { gap: 10px; flex: 1; }
+      .logo { width: 104px; }
+      .sep, .brand-text, #btn-open, #btn-full { display: none; }
+      .icon-btn { border: 0; background: none; }
+      .sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0; width: min(300px, 84vw); z-index: 40;
+        transform: translateX(-102%); transition: transform .22s ease-out;
+        border-radius: 0 22px 22px 0; box-shadow: 0 18px 50px rgba(12, 62, 102, .25);
+      }
+      .collapsed .nav-btn { justify-content: flex-start; width: 100%; padding: 6px 14px 6px 26px; margin: 3px 0; border-radius: 0 999px 999px 0; }
+      .collapsed .nav-text { display: flex; }
+      .nav-open .sidebar { transform: none; }
+      .scrim { display: block; position: fixed; inset: 0; z-index: 35; background: rgba(9, 48, 78, .38); }
+      .collapse-btn { display: none; }
+      .stage { grid-column: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } .sidebar { transition: none; } }
   </style>
 </head>
 <body>
-  <iframe src="https://script.google.com/macros/s/AKfycbwOpoaH12S6oLyJKv4k8oZcjVZWWhvT7jGIKZkN9skCroJV9TEjktAQiEFtcwbbUIVA/exec"></iframe>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-board" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M2 6.5V21l6.5-3.5 7 3.5 6.5-3.5V3l-6.5 3.5-7-3.5L2 6.5zM8.5 3v14.5M15.5 6.5V21"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M8 17v-5M13 17V7M18 17v-8"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M2 4v6h6M3.5 15a9 9 0 1 0 2.13-9.36L2 10"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></symbol>
+    <symbol id="i-full" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+  </defs>
+</svg>
+
+<div class="app" id="app">
+  <header class="topbar">
+    <button type="button" class="icon-btn menu-btn" id="btn-menu" aria-label="เปิดเมนู" aria-controls="sidebar" aria-expanded="false"><svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    <div class="brand">
+      <span class="logo" role="img" aria-label="Tenneco"></span>
+      <span class="sep" aria-hidden="true"></span>
+      <span class="brand-text"><b>MAINTENANCE MONITORING CENTER</b><small>ศูนย์ติดตามงานซ่อมบำรุง</small></span>
+    </div>
+    <div class="top-actions">
+      <span class="clock" id="clock"></span>
+      <button type="button" class="icon-btn" id="btn-reload" title="โหลดหน้านี้ใหม่" aria-label="โหลดหน้านี้ใหม่"><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+      <a class="icon-btn" id="btn-open" target="_blank" rel="noopener" title="เปิดหน้านี้ในแท็บใหม่" aria-label="เปิดหน้านี้ในแท็บใหม่"><svg class="ico" aria-hidden="true"><use href="#i-external"/></svg></a>
+      <button type="button" class="icon-btn" id="btn-full" title="แสดงเต็มจอ" aria-label="แสดงเต็มจอ"><svg class="ico" aria-hidden="true"><use href="#i-full"/></svg></button>
+    </div>
+  </header>
+
+  <aside class="sidebar" id="sidebar">
+    <nav id="nav" aria-label="เมนูหลัก"></nav>
+    <button type="button" class="collapse-btn" id="btn-collapse" aria-label="ย่อเมนู" title="ย่อเมนู"><svg class="ico" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <main class="stage" id="stage"></main>
+</div>
+
+<script>
+  /* =====================================================================
+   * เมนูด้านข้าง — เพิ่ม/ลบ/สลับลำดับหัวข้อได้ที่นี่
+   *   title : ชื่อหัวข้อ (ภาษาอังกฤษ)   sub : คำอธิบายภาษาไทย
+   *   icon  : board | map | chart | doc   url : หน้าที่จะแสดง (ต้องเป็นหน้าที่ยอมให้ฝังในกรอบได้)
+   *   { divider: true } = เส้นคั่นหมวด
+   * ===================================================================== */
+  const MENU = [
+    {
+      id: 'monitor', title: 'MONITORING CENTER', sub: 'ภาพรวมงานซ่อม Real-time', icon: 'board',
+      url: 'https://script.google.com/macros/s/AKfycbwOpoaH12S6oLyJKv4k8oZcjVZWWhvT7jGIKZkN9skCroJV9TEjktAQiEFtcwbbUIVA/exec',
+    },
+    { divider: true },
+    {
+      id: 'layout', title: 'PLANT LAYOUT', sub: 'ผังโรงงาน สถานะเครื่องจักร', icon: 'map',
+      url: 'https://pannarai1234.github.io/mtn-repair/?embed=layout',
+    },
+    // ตัวอย่างการเพิ่มหัวข้อ เช่น รายงาน Looker Studio (ใช้ลิงก์ "ฝังรายงาน" จาก Looker Studio):
+    // { id: 'kpi', title: 'KPI DASHBOARD', sub: 'รายงาน KPI', icon: 'chart', url: 'https://lookerstudio.google.com/embed/reporting/....' },
+  ];
+
+  (function () {
+    'use strict';
+    const $ = s => document.querySelector(s);
+    const app = $('#app');
+    const stage = $('#stage');
+    const items = MENU.filter(m => !m.divider);
+    // ทดสอบบนเครื่อง: ?layout=<url> ใช้แทนลิงก์ผังโรงงาน
+    const over = new URLSearchParams(location.search).get('layout');
+    if (over) items.find(m => m.id === 'layout').url = over;
+
+    const ico = n => `<svg class="ico" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+    $('#nav').innerHTML = MENU.map(m => m.divider ? '<div class="divider" role="separator"></div>' : `
+      <button type="button" class="nav-btn" data-id="${m.id}" title="${m.title} · ${m.sub}">
+        ${ico(m.icon)}<span class="nav-text"><span class="nav-title">${m.title}</span><span class="nav-sub">${m.sub}</span></span>
+      </button>`).join('');
+
+    const frames = new Map();       // เก็บกรอบที่เปิดแล้วไว้ สลับกลับมาไม่ต้องโหลดใหม่
+    let current = null;
+
+    function frameFor(m) {
+      let f = frames.get(m.id);
+      if (f) return f;
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `<div class="loading"><div class="spinner"></div><span>กำลังโหลด ${m.title}…</span></div>`;
+      const loading = wrap.firstElementChild;
+      const iframe = document.createElement('iframe');
+      iframe.title = m.title;
+      iframe.allow = 'fullscreen; clipboard-write';
+      iframe.addEventListener('load', () => loading.remove());
+      iframe.src = m.url;
+      stage.append(iframe, loading);
+      f = { iframe, loading };
+      frames.set(m.id, f);
+      return f;
+    }
+
+    function show(id) {
+      const m = items.find(x => x.id === id) || items[0];
+      if (location.hash !== '#' + m.id) history.replaceState(null, '', '#' + m.id);
+      frameFor(m);
+      for (const [fid, f] of frames) {
+        f.iframe.hidden = fid !== m.id;
+        if (f.loading.isConnected) f.loading.hidden = fid !== m.id;
+      }
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        const on = b.dataset.id === m.id;
+        b.classList.toggle('active', on);
+        if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+      });
+      $('#btn-open').href = m.url;
+      document.title = `${m.title} · Maintenance Monitoring Center`;
+      current = m;
+      setNav(false);
+    }
+
+    function setNav(open) {
+      app.classList.toggle('nav-open', open);
+      $('#scrim').hidden = !open;
+      $('#btn-menu').setAttribute('aria-expanded', String(open));
+    }
+
+    function setCollapsed(c) {
+      app.classList.toggle('collapsed', c);
+      const b = $('#btn-collapse');
+      b.title = c ? 'ขยายเมนู' : 'ย่อเมนู';
+      b.setAttribute('aria-label', b.title);
+    }
+
+    $('#nav').addEventListener('click', e => {
+      const b = e.target.closest('.nav-btn');
+      if (b) show(b.dataset.id);
+    });
+    window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+    $('#btn-menu').addEventListener('click', () => setNav(!app.classList.contains('nav-open')));
+    $('#scrim').addEventListener('click', () => setNav(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setNav(false); });
+    $('#btn-collapse').addEventListener('click', () => {
+      const c = !app.classList.contains('collapsed');
+      setCollapsed(c);
+      try { localStorage.setItem('mmc.side', c ? 'collapsed' : 'open'); } catch (e) { /* ignore */ }
+    });
+    $('#btn-reload').addEventListener('click', () => {
+      const f = frames.get(current.id);
+      if (!f) return;
+      if (!f.loading.isConnected) stage.append(f.loading);
+      f.loading.hidden = false;
+      f.iframe.src = current.url;
+    });
+    $('#btn-full').addEventListener('click', () => {
+      const f = frames.get(current.id);
+      if (f && f.iframe.requestFullscreen) f.iframe.requestFullscreen().catch(() => {});
+    });
+
+    const clock = () => {
+      $('#clock').textContent = new Date().toLocaleString('th-TH', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    };
+    clock();
+    setInterval(clock, 20000);
+
+    let side = null;
+    try { side = localStorage.getItem('mmc.side'); } catch (e) { /* ignore */ }
+    setCollapsed(side ? side === 'collapsed' : window.innerWidth < 1100);
+    show(location.hash.slice(1));
+  })();
+</script>
 </body>
 </html>
