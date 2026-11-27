@@ -174,14 +174,18 @@
       id: 'monitor', title: 'MONITORING CENTER', sub: 'ภาพรวมงานซ่อม Real-time', icon: 'board',
       url: 'https://script.google.com/macros/s/AKfycbwOpoaH12S6oLyJKv4k8oZcjVZWWhvT7jGIKZkN9skCroJV9TEjktAQiEFtcwbbUIVA/exec',
     },
+    {
+      // รายงาน Looker Studio: MAINTENANCE REPORT (KPI / Oil / Attendance ฯลฯ กดเปลี่ยนหน้าในรายงานได้)
+      id: 'kpi', title: 'KPI DASHBOARD', sub: 'รายงาน KPI ซ่อมบำรุง', icon: 'chart',
+      url: 'https://lookerstudio.google.com/embed/reporting/d6d10be2-363d-4726-b2b1-0dc940e9113b/page/p_dfqav3pszd',
+    },
     { divider: true },
     {
       // หน้าผังใน Apps Script ของ Monitoring Center (?page=layout) — เครื่องเป็นสีแดงตามใบงานจริงในชีต
       id: 'layout', title: 'PLANT LAYOUT', sub: 'ผังโรงงาน สถานะเครื่องจักร', icon: 'map',
       url: 'https://script.google.com/macros/s/AKfycbwOpoaH12S6oLyJKv4k8oZcjVZWWhvT7jGIKZkN9skCroJV9TEjktAQiEFtcwbbUIVA/exec?page=layout',
     },
-    // ตัวอย่างการเพิ่มหัวข้อ เช่น รายงาน Looker Studio (ใช้ลิงก์ "ฝังรายงาน" จาก Looker Studio):
-    // { id: 'kpi', title: 'KPI DASHBOARD', sub: 'รายงาน KPI', icon: 'chart', url: 'https://lookerstudio.google.com/embed/reporting/....' },
+    // เพิ่มหัวข้อใหม่: { id: 'ชื่อไม่ซ้ำ', title: '...', sub: '...', icon: 'board|map|chart|doc', url: '...' },
   ];
 
   (function () {
